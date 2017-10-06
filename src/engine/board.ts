@@ -7,8 +7,8 @@ export default class Board {
     public currentPlayer: string;
     public board: Array<Array<Piece|undefined>>;
 
-    constructor() {
-        this.currentPlayer = Player.WHITE;
+    constructor(currentPlayer) {
+        this.currentPlayer = currentPlayer ? currentPlayer : Player.WHITE;
         this.board = this.createBoard();
     }
 
