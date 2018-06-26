@@ -1,7 +1,5 @@
 export default class Square {
-    constructor(row, col) {
-        this.row = row;
-        this.col = col;
+    constructor(public row: number, public col: number) {
     }
 
     static at(row, col) {

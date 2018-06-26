@@ -1,6 +1,6 @@
 const Player = Object.freeze({
-    WHITE: Symbol('white'),
-    BLACK: Symbol('black')
+    WHITE: ('white'),
+    BLACK: ('black')
 });
 
 export default Player;
