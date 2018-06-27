@@ -14,7 +14,7 @@ export default class Rook extends Piece {
         this.hasMoved = true;
     }
 
-    getAvailableMoves(board: Board): Square[] {
+    getAvailableMovesNoCheck(board: Board): Square[] {
         const location = board.findPiece(this);
         return [
             ...this.moveStraightRelative(board, location, 1, 0),

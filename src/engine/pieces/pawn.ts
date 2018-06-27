@@ -9,7 +9,7 @@ export default class Pawn extends Piece {
         super(player);
     }
 
-    getAvailableMoves(board: Board):Array<Square> {
+    getAvailableMovesNoCheck(board: Board):Array<Square> {
         const location = board.findPiece(this);
         const row = location.row + (this.player == Player.WHITE ? 1 : -1);
         if (row < 0 || row >= 8) {

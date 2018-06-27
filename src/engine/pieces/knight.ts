@@ -8,7 +8,7 @@ export default class Knight extends Piece {
         super(player);
     }
 
-    getAvailableMoves(board: Board): Square[] {
+    getAvailableMovesNoCheck(board: Board): Square[] {
         const location = board.findPiece(this);
         return [
             new Square(location.row - 1, location.col - 2),
@@ -20,9 +20,6 @@ export default class Knight extends Piece {
             new Square(location.row + 2, location.col - 1),
             new Square(location.row + 2, location.col + 1),
         ]   .filter(square => square.inRange())
-            .filter(square => {
-                const pieceThere = board.getPiece(square);
-                return pieceThere == undefined || pieceThere.player != this.player && !(pieceThere instanceof King)
-            })
+            .filter(square => this.canIMoveThere(board, square))
     }
 }

@@ -45,10 +45,7 @@ export default class King extends Piece {
                 new Square(location.row, location.col + 1),
                 new Square(location.row + 1, location.col + 1),
             ].filter(square => square.inRange())
-                .filter(square => {
-                    const pieceThere = board.getPiece(square);
-                    return pieceThere == undefined || pieceThere.player != this.player && !(pieceThere instanceof King)
-                }),
+                .filter(square => this.canIMoveThere(board, square)),
 
             // castling east
             ...this.checkCanCastle(board, enemyPieces, location, Square.at(location.row, 7),
@@ -58,6 +55,21 @@ export default class King extends Piece {
             ...this.checkCanCastle(board, enemyPieces, location, Square.at(location.row, 0),
                 Square.at(location.row, 2), Square.at(location.row, 3), Square.at(location.row, 1))
         ];
+    }
+
+    protected getAvailableMovesNoCheck(board: Board): Square[] {
+        const location = board.findPiece(this);
+        return [
+                new Square(location.row - 1, location.col - 1),
+                new Square(location.row, location.col - 1),
+                new Square(location.row + 1, location.col - 1),
+                new Square(location.row - 1, location.col),
+                new Square(location.row + 1, location.col),
+                new Square(location.row - 1, location.col + 1),
+                new Square(location.row, location.col + 1),
+                new Square(location.row + 1, location.col + 1),
+            ].filter(square => square.inRange())
+                .filter(square => this.canIMoveThere(board, square))
     }
 
     private checkCanCastle(board: Board, enemyPieces: (Piece|undefined)[], location: Square, rookStartingSquare: Square,
@@ -79,8 +91,7 @@ export default class King extends Piece {
                     board.setPiece(kingTargetSquare, eastRook);
 
                     const canCastle = enemyPieces
-                        .map(piece => (piece as Piece)
-                            .getAvailableMoves(board)
+                        .map(piece => Piece.getAvailableMovesNoCheckOn(board, piece as Piece)
                             .filter(square =>
                                 square.equals(location) ||
                                 square.equals(rookTargetSquare) ||

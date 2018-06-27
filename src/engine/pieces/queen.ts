@@ -7,7 +7,7 @@ export default class Queen extends Piece {
         super(player);
     }
 
-    getAvailableMoves(board:Board): Square[] {
+    getAvailableMovesNoCheck(board:Board): Square[] {
         const location = board.findPiece(this);
         return [
             ...this.moveStraightRelative(board, location, 1, 0),

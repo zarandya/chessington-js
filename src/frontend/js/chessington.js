@@ -65,7 +65,7 @@ function onDrop(source, target) {
     const toSquare = positionStringToSquare(target);
     const pieceToMove = board.getPiece(fromSquare);
     
-    if (!pieceToMove || !pieceToMove.getAvailableMoves(board).some(square => square.equals(toSquare))) {
+    if (!pieceToMove || !pieceToMove.getAvailableMovesNoCheck(board).some(square => square.equals(toSquare))) {
         return 'snapback';
     }
     pieceToMove.moveTo(board, toSquare);
