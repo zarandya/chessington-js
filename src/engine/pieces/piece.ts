@@ -128,8 +128,9 @@ export default class Piece {
                 board.setPiece(step, this);
                 board.setPiece(location, undefined);
                 const moveValid = enemyPieces
+                    .filter(enemy => enemy != originalPieceThere)
                     .map(enemy => (enemy as Piece).getAvailableMovesNoCheck(board))
-                    .reduce((prev, currentArray) => prev && currentArray.filter(kingSquare.equals).length == 0, true);
+                    .reduce((prev, currentArray) => prev && currentArray.filter(x => kingSquare.equals(x)).length == 0, true);
                 board.setPiece(step, originalPieceThere);
                 board.setPiece(location, this);
                 return moveValid;

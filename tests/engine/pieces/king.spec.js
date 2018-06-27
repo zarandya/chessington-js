@@ -125,4 +125,28 @@ describe('King', () => {
 
         moves.should.not.deep.include(Square.at(0, 6));
     })
+
+    it('cannot move to place where attacked', () => {
+        const king = new King(Player.WHITE);
+        const enemy = new Rook(Player.BLACK);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(2, 5), enemy);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(0, 5));
+
+    })
+
+    it('cannot move next to other king', () => {
+        const king = new King(Player.WHITE);
+        const enemy = new King(Player.BLACK);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 6), enemy);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(0, 5));
+
+    })
 });

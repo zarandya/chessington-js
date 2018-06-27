@@ -32,9 +32,10 @@ export default class King extends Piece {
 
     getAvailableMoves(board: Board): Square[] {
         const location = board.findPiece(this);
-        const enemyPieces = board.board
+        const enemyPieces: (Piece|undefined)[] = board.board
             .reduce((arr1, arr2) => arr1.concat(arr2), [])
             .filter(piece => piece != undefined && piece.player != this.player)
+        console.log(JSON.stringify(enemyPieces));
         return [
             // basic moves
             ...[
@@ -54,8 +55,9 @@ export default class King extends Piece {
                     board.setPiece(square, this.dummyRook);
                     board.setPiece(location, undefined);
                     const moveValid = enemyPieces
+                        .filter(enemy => enemy != originalPieceThere)
                         .map(enemy => Piece.getAvailableMovesNoCheckOn(board, enemy as Piece))
-                        .reduce((prev, currentArray) => prev && currentArray.filter(square.equals).length == 0, true)
+                        .reduce((prev, currentArray) => prev && currentArray.filter(x => square.equals(x)).length == 0, true);
                     board.setPiece(square, originalPieceThere);
                     board.setPiece(location, this);
                     return moveValid;

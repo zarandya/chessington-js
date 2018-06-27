@@ -90,4 +90,17 @@ describe('Rook', () => {
 
         moves.should.not.deep.include(Square.at(4, 6));
     });
+
+    it('cannot leave king exposed', () => {
+        const king = new King(Player.WHITE);
+        const rook = new Rook(Player.WHITE);
+        const enemy = new Rook(Player.BLACK);
+        board.setPiece(Square.at(0, 0), king);
+        board.setPiece(Square.at(0, 2), rook);
+        board.setPiece(Square.at(0, 4), enemy);
+
+        const moves = rook.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(1, 2));
+    })
 });
