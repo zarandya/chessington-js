@@ -13,4 +13,8 @@ export default class Square {
     toString() {
         return `Row ${this.row}, Col ${this.col}`;
     }
+
+    public inRange(): boolean {
+        return (this.row >= 0 && this.row < 8 && this.col >= 0 && this.col < 8)
+    }
 }
