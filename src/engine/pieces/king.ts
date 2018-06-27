@@ -28,6 +28,8 @@ export default class King extends Piece {
         this.hasMoved = true;
     }
 
+    private dummyRook = new Rook(this.player);
+
     getAvailableMoves(board: Board): Square[] {
         const location = board.findPiece(this);
         const enemyPieces = board.board
@@ -44,8 +46,20 @@ export default class King extends Piece {
                 new Square(location.row - 1, location.col + 1),
                 new Square(location.row, location.col + 1),
                 new Square(location.row + 1, location.col + 1),
-            ].filter(square => square.inRange())
-                .filter(square => this.canIMoveThere(board, square)),
+            ]   .filter(square => square.inRange())
+                .filter(square => this.canIMoveThere(board, square))
+                .filter(square => {
+                    // Check for enemy pieces attacking
+                    const originalPieceThere = board.getPiece(square);
+                    board.setPiece(square, this.dummyRook);
+                    board.setPiece(location, undefined);
+                    const moveValid = enemyPieces
+                        .map(enemy => Piece.getAvailableMovesNoCheckOn(board, enemy as Piece))
+                        .reduce((prev, currentArray) => prev && currentArray.filter(square.equals).length == 0, true)
+                    board.setPiece(square, originalPieceThere);
+                    board.setPiece(location, this);
+                    return moveValid;
+                }),
 
             // castling east
             ...this.checkCanCastle(board, enemyPieces, location, Square.at(location.row, 7),
@@ -58,6 +72,7 @@ export default class King extends Piece {
     }
 
     protected getAvailableMovesNoCheck(board: Board): Square[] {
+        // This is used in checking if the king can be hit by another king. This never happens when castling.
         const location = board.findPiece(this);
         return [
                 new Square(location.row - 1, location.col - 1),
